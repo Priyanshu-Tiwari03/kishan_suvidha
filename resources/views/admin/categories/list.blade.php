@@ -3,8 +3,9 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Categories</h2>
-    <a href="{{ route('admin.categories.create') }}" class="btn btn-dark">Create Category</a>
+    <a href="{{ route('admin.categories.create') }}" class="btn btn-dark">Add new category</a>
 </div>
+
 
 <div class="card shadow-sm">
     <div class="card-header bg-dark text-white">
@@ -52,9 +53,9 @@
         </table>
 
         <div class="mt-3">
-            <a href="#" class="btn btn-success">Export to Excel</a>
-            <a href="#" class="btn btn-primary">Export to CSV</a>
-            <a href="#" class="btn btn-danger">Export to PDF</a>
+            <a href="{{ url('/categories/export/excel') }}" class="btn btn-success">Export to Excel</a>
+            <a href="{{ url('/categories/export/csv') }}" class="btn btn-primary">Export to CSV</a>
+            <a href="{{ url('/categories/export/pdf') }}" class="btn btn-danger">Export to PDF</a>
         </div>
     </div>
 </div>

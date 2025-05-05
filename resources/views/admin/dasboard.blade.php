@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
    <head>
       <meta charset="utf-8">
@@ -73,19 +73,59 @@
         <div class="sidebar" id="sidebar">
             <h5 class="text-center">Menu</h5>
             <ul class="nav flex-column">
+                 <li class="nav-item">
+                <a  class="nav-link" href="{{ route('admin.categories.index') }}">Category</a>
+                </li> 
+                <li class ="nav-item">
+                    <a  class="nav-link" href="{{ route('admin.Sub-categories.index') }}">SubCategory</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('products.index') }}">Product</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('users.index') }}">User</a>
                 </li>   
-                <li class="nav-item">
-                <a  class="nav-link" href="{{ route('admin.categories.index') }}">Add Category</a>
 
-                </li> 
+               <li class="nav-item">
+                    <a class="nav-link" href="{{ route('orders.index') }}">Order</a>
+                </li>   
+                
+
+                <li class ="nav-item">
+                    <a  class="nav-link" href="{{ route('schemes.index') }}">Schemes</a>
+                </li>
+
             </ul>
-        </div>
+        </div> -->
+        @extends('layouts.admin')
+
+@section('content')
+    <!-- MAIN-CONTENT -->
+
+    <!-- Page Header -->
+    <div class="page-header">
         
+        <div>
+            <h2 class="main-content-title tx-24 mg-b-5">Welcome To Dashboard</h2>
+            <ol class="breadcrumb">
+                <!-- <li class="breadcrumb-item"><a href="javascript:void(0);"></a></li> -->
+                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+        </div>
+        <div class="d-flex">
+            <div class="justify-content-center">
+                <button type="button" class="btn btn-white btn-icon-text my-2 me-2">
+                    <i class="fe fe-download me-2"></i> Import
+                </button>
+                <button type="button" class="btn btn-white btn-icon-text my-2 me-2">
+                    <i class="fe fe-filter me-2"></i> Filter
+                </button>
+                <button type="button" class="btn btn-primary my-2 btn-icon-text">
+                    <i class="fe fe-download-cloud me-2"></i> Download Report
+                </button>
+            </div>
+        </div>
+    </div>
         <div class="content">
             <div class="container">
                <div class="row mt-4">
@@ -118,5 +158,4 @@
       </script>
       
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-   </body>
-</html>
+      @endsection

@@ -1,30 +1,11 @@
-<!doctype html>
-<html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Agriculture Dashboard</title>
-      <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-      <style>
-          #eventCarousel img {
-              width: 100%;
-              height: 50vh;
-              object-fit: cover;
-          }
-          #eventCarousel {
-              width: 100%;
-              height: 50vh;
-          }
-          .feature-card {
-              text-align: center;
-              padding: 20px;
-              border-radius: 10px;
-              box-shadow: 0 0 10px rgba(0,0,0,0.1);
-          }
-      </style>
-   </head>
-   <body class="bg-light">
-        <nav class="navbar navbar-expand-md bg-success shadow-lg text-white">
+
+     
+      @extends('layouts.user')
+      @section('content')
+    
+ 
+   <div class="bg-light">
+        <!-- <nav class="navbar navbar-expand-md bg-success shadow-lg text-white">
             <div class="container">
                 <a class="navbar-brand text-white" href="#">
                    <strong>Agriculture Dashboard</strong>
@@ -53,10 +34,10 @@
                 </div>
                 </div>
             </div>
-        </nav>
+        </nav>  -->
         
         <!-- Image Slider -->
-        <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
+         <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="{{ asset('img/slider1.jpg') }}" class="d-block w-100" alt="Event 1">
@@ -80,6 +61,27 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+        <div class="container py-4">
+        
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+   
+
+        @foreach($products as $product)
+       
+            <div class="col">
+            <a href="{{ route('product.detail', $product->id) }}" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{{ asset('uploads/product/'.$product->image)}}" class="card-img-top" alt="{{ $product->name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $product->name }}</h5>
+                            <p class="text-success fw-bold">₹{{ $product->price }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @endforeach
+    </div>
+</div>
 
         <div class="container mt-4">
             <div class="row">
@@ -95,7 +97,7 @@
                         <p>Get accurate weather updates for farming.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4"> 
                     <div class="feature-card bg-info text-white">
                         <h4>Market Prices</h4>
                         <p>Stay updated on current market prices.</p>
@@ -104,6 +106,7 @@
             </div>
         </div>
         
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-   </body>
-</html>
+      
+        </div>   
+        @endsection 
+

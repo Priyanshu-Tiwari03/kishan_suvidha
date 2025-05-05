@@ -1,17 +1,27 @@
 <?php
 use App\Http\Controllers\admin\LoginController as AdminLoginController;
 use App\Http\Controllers\admin\DasboardController as AdminDasboardController;
-use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductController as AdminProductController;
 use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DasboardController;
+use App\Http\Controllers\ProductController ;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\SchemeController;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Categories;
+use App\Models\SubCategory;
+use App\Http\Controllers\OrderController;
 use App\Exports\UsersExport;
 use App\Exports\ProductsExport;
+use App\Exports\CategoriesExport;
+use App\Exports\subcategoryExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
@@ -32,7 +42,17 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('logout',[LoginController::class,'logout'])->name('account.logout');
         Route::get('dasboard',[DasboardController::class,'index'])->name('account.dasboard');
     });
+    
 });
+
+// Cart route
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail')->middleware('auth');
+Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/productbuy/{id}', [CartController::class, 'productBuy'])->name('cart.productbuy');
+
+
 
 Route::group(['prefix' => 'admin'], function () {
     // Guest Middleware for users
@@ -50,7 +70,7 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 
-Route::controller(ProductController::class)->group(function(){  
+Route::controller(AdminProductController::class)->group(function(){  
     Route::get('/admin/products','index')->name('products.index');
     Route::get('/admin/products/create','create')->name('products.create');
     Route::post('/admin/products','store')->name('products.store');
@@ -70,9 +90,53 @@ Route::controller(UserController::class)->group(function(){
     Route::delete('/admin/users/{user}','destroy')->name('users.destroy');
 });
 
+ //arjun route
+ //schemes
+ Route::resource('schemes', SchemeController::class);
+ Route::post('/schemes', [SchemeController::class, 'store'])->name('schemes.store');
 
+ Route::resource('orders', OrderController::class);   
 
-Route::get('/users/export/{type}', function ($type) {
+ Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('Sub-categories', SubCategoryController::class);
+});
+//category
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('categories', CategoryController::class);
+});
+
+Route::get('/categories/export/excel', function () {
+        return Excel::download(new CategoriesExport, 'categories.xlsx');
+    });
+    
+Route::get('/categories/export/csv', function () {
+        return Excel::download(new CategoriesExport, 'categories.csv');
+    });
+    
+Route::get('/categories/export/pdf', function () {
+        $categories = category::all();
+        $pdf = Pdf::loadView('export.categories_pdf', compact('categories'));
+        return $pdf->download('categories.pdf');
+    });    
+//subcategory
+Route::get('/sub_categories/export/excel', function () {
+        return Excel::download(new subcategoryExport, 'sub_categories.xlsx');
+    });
+    
+Route::get('/sub_categories/export/csv', function () {
+        return Excel::download(new subcategoryExport, 'sub_categories.csv');
+    });
+    
+Route::get('/sub_categories/export/pdf', function () {
+        $sub_categories = subcategory::all();
+       $pdf = PDF::loadView('export.sub_categories_pdf', ['sub_categories' => $sub_categories]);
+       return $pdf->download('sub_categories.pdf');
+
+    }); 
+
+    //Export routes
+    Route::get('/users/export/{type}', function ($type) {
         $fileName = 'users.' . $type;
         return Excel::download(new UsersExport, $fileName);
     })->where('type', 'csv|xlsx|json');
@@ -96,11 +160,4 @@ Route::get('/products/export/pdf', function () {
         $products = Product::all();
         $pdf = Pdf::loadView('export.products_pdf', compact('products'));
         return $pdf->download('products.pdf');
-    });    
-
-//Route::resource('admin/categories', App\Http\Controllers\Admin\CategoryController::class);
-
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('categories', CategoryController::class);
-});
+    });

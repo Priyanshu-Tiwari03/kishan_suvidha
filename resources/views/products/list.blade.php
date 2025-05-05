@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -6,8 +6,10 @@
     <title>Simple Crud </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   </head>
-  <body>
-    <div class="bg-dark py-3">
+  <body> -->
+  @extends('layouts.admin')
+  @section('content')
+  <div class="bg-dark py-3">
         <h3 class="text-white text-center">KS ADMIN </h3>
     </div>
     <div class = "container">
@@ -39,6 +41,7 @@
                                 <th>Sku</th>
                                 <th>Price</th>
                                 <th>Category</th>
+                                <th>SubCategory</th>
                                 <th>Created at</th>
                                 <th>Action</th>
                             </tr>
@@ -54,9 +57,13 @@
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->sku}}</td>
                                 <td>Rs.{{ $product->price }}</td>
-                                <td>{{ $product->category }}</td>
-                                <td>{{ \Carbon\Carbon::parse($product->created_at)->format('d M,y') }}</td>
-                                
+              <td>
+    {{ is_object($product->category) ? $product->category->name : ($product->category ?: 'No Category') }}
+            </td>
+
+                <td>{{ $product->subCategory ? $product->subCategory->name : 'No Sub-category' }}</td>
+                <td>{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y') }}</td>
+
                                 <td>
                                     <a href="{{ route('products.edit',$product->id) }}" class = "btn btn-dark">Edit</a>
                                     <a href="#" onclick="deleteProduct({{ $product->id }})" class = "btn btn-danger">Delete</a>
@@ -80,8 +87,8 @@
             </div>
         </div>
     </div>
-  </body>
-</html>
+  <!-- </body>
+</html> -->
 
 <script>
     function deleteProduct(id){
@@ -90,3 +97,4 @@
         }
     }
 </script>
+@endsection

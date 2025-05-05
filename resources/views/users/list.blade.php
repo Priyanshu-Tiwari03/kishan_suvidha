@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -6,7 +6,9 @@
     <title>User List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
-  <body>
+  <body> -->
+  @extends('layouts.admin')
+  @section('content')
     <div class="bg-dark py-3">
         <h3 class="text-white text-center">KS-Admin</h3>
     </div>
@@ -69,17 +71,13 @@
                             @endforeach
                             @endif
                         </table>
-            <a href="{{ url('/users/export/xlsx') }}" class="btn btn-success">Export to Excel</a>
-            <a href="{{ url('/users/export/csv') }}" class="btn btn-primary">Export to CSV</a>
-            <a href="{{ url('/users/export/pdf') }}" class="btn btn-danger">Export to PDF</a>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-  </body>
-</html>
+  <!-- </body>
+</html> -->
 
 <script>
     function deleteUser(id){
@@ -88,3 +86,4 @@
         }
     }
 </script>
+@endsection

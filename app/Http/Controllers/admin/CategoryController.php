@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use App\Exports\CategoriesExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,6 +14,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         return view('admin.categories.list', compact('categories'));
+       
     }
 
     public function create()
@@ -94,5 +97,10 @@ class CategoryController extends Controller
     {
         $category->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully!');
+    }
+
+    public function export()
+    {
+        return Excel::download(new CategoriesExport, 'categories.xlsx');
     }
 }
