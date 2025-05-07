@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -47,15 +49,55 @@ class CartController extends Controller
 }
 public function productBuy($id)
 {
+    // 1️⃣ Grab your cart‐item from session
     $cart = session()->get('cart', []);
-
-    if (!isset($cart[$id])) {
-        return redirect()->route('cart.show')->with('error', 'Product not found in cart.');
+    if (! isset($cart[$id])) {
+        return redirect()
+            ->route('cart.show')
+            ->with('error', 'Product not found in cart.');
     }
 
-    $product = $cart[$id];
-    return view('productbuy', compact('product'));
-}
+    // 2️⃣ Load the actual Product model (with its reviews and reviewers)
+    $product = Product::with('reviews.user')->findOrFail($id);
+
+    // 3️⃣ Calculate average rating
+    $avgRating = $product->reviews->avg('rating') ?? 0;
+
+    // 4️⃣ Build per‑star counts & % breakdown
+    $ratingsCount = [];
+    for ($i = 1; $i <= 5; $i++) {
+        $ratingsCount[$i] = $product->reviews->where('rating', $i)->count();
+    }
+    $totalReviews = array_sum($ratingsCount);
+    $ratingsBreakdown = [];
+    foreach ($ratingsCount as $star => $count) {
+        $ratingsBreakdown[$star] = $totalReviews
+            ? round(($count / $totalReviews) * 100)
+            : 0;
+    }
+
+    // 5️⃣ Check if the current user has ever purchased this product
+    $hasPurchased = false;
+    if (Auth::check()) {
+        $hasPurchased = Order::where('uid', Auth::id())
+            ->where('pid', $id)
+            ->exists();
+    }
+
+    // 6️⃣ Pass everything to your Blade
+    return view('productbuy', [
+        // your existing cart‑item data
+        'cartItem'         => $cart[$id],
+        // the Eloquent Product (with its name, image, stock, etc.)
+        'product'          => $product,
+        // reviews data
+        'avgRating'        => $avgRating,
+        'ratingsCount'     => $ratingsCount,
+        'ratingsBreakdown' => $ratingsBreakdown,
+        // purchase flag for the modal logic
+        'hasPurchased'     => $hasPurchased,
+    ]);
    
+}
 }
 

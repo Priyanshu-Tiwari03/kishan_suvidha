@@ -14,12 +14,10 @@ class ProductController extends Controller
 {
     //This methods will show products page
     public function index(){
-    $products = Product::with(['categories', 'subCategory'])
+    $products = Product::with(['category', 'subCategory'])
                 ->orderBy('created_at','DESC')
                 ->get();
-    return view('products.list',[
-        'products' => $products
-    ]);
+    return view('products.list',compact('products'));
 }
 
     
@@ -87,53 +85,55 @@ class ProductController extends Controller
 
     
     //This methods will update a products page
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $product = Product::findOrFail($id);
-
-        $rules=[
+    
+        $rules = [
             'name' => 'required|min:5',
             'sku' => 'required|min:3',
             'price' => 'required|numeric',
-            'category' => 'required|in:Seeds & Saplings,Fertilizers & Pesticides,Farming Tools & Equipment,Animal Husbandry & Dairy,Agro-Technology & Smart Farming',
-            'description' => 'required|string'
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_id' => 'nullable|exists:sub_categories,id',
+            'description' => 'required|string',
         ];
-        if($request->image != ""){
-            $rules['image'] = 'image';
-        }
-       $validator = Validator::make($request->all(),$rules);
-
-       if($validator->fails()){
-            return redirect()->route('products.edit',$product->id)->withInput()->withErrors($validator);
-       }
-       //here we  will update product 
-       
-       $product->name = $request->name;
-       $product->sku = $request->sku;
-       $product->price = $request->price;
-       $product->category_id = $request->category_id;
-       $product->sub_category_id = $request->sub_category_id;  // if needed
-       $product->description = $request->description;
-       
-
-       if($request->image != ""){
-            //delete old image
-            File::delete(public_path('uploads/product/'.$product->image)); 
-        //here we will store image
-       $image = $request->image;
-       $ext = $image->getClientOriginalExtension();
-       $imageName = time().'.'.$ext; //unique image name
-
-        //save image in product directory
-        $image->move(public_path('uploads/product'),$imageName);
-
-       //save image name in database
-       $product->image = $imageName;
-       $product->save();
-    }
-       
-       return redirect()->route('products.index')->with('success','product updated successfully.');
     
+        if ($request->hasFile('image')) {
+            $rules['image'] = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048';
+        }
+    
+        $validator = Validator::make($request->all(), $rules);
+    
+        if ($validator->fails()) {
+            return redirect()->route('products.edit', $product->id)->withInput()->withErrors($validator);
+        }
+    
+        // Update product fields
+        $product->name = $request->name;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->sub_category_id = $request->sub_category_id;
+        $product->description = $request->description;
+    
+        // Handle image update
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($product->image && File::exists(public_path('uploads/product/' . $product->image))) {
+                File::delete(public_path('uploads/product/' . $product->image));
+            }
+    
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/product'), $imageName);
+            $product->image = $imageName;
+        }
+    
+        $product->save();
+    
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
+    
 
     
     //This methods will detete products page

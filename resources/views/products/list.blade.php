@@ -58,7 +58,7 @@
                                 <td>{{ $product->sku}}</td>
                                 <td>Rs.{{ $product->price }}</td>
               <td>
-    {{ is_object($product->category) ? $product->category->name : ($product->category ?: 'No Category') }}
+    {{ $product->category ? $product->category->name :  'No Category' }}
             </td>
 
                 <td>{{ $product->subCategory ? $product->subCategory->name : 'No Sub-category' }}</td>

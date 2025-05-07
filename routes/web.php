@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\categoryName;
 use App\Models\Categories;
 use App\Models\SubCategory;
 use App\Http\Controllers\OrderController;
@@ -161,3 +162,11 @@ Route::get('/products/export/pdf', function () {
         $pdf = Pdf::loadView('export.products_pdf', compact('products'));
         return $pdf->download('products.pdf');
     });
+    
+    Route::resource('schemes', SchemeController::class);
+    Route::post('/schemes', [SchemeController::class, 'store'])->name('schemes.store');
+
+    Route::resource('orders', OrderController::class);
+    // show all products in a given category
+Route::get('/category/{category}', [App\Http\Controllers\ProductController::class, 'category'])
+->name('products.category');

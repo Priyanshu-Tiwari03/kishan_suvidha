@@ -1,14 +1,7 @@
-<!-- <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Simple Crud </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  </head>
-  <body> -->
+
   @extends('layouts.admin')
   @section('content')
+ 
     <div class="bg-dark py-3">
         <h3 class="text-white text-center">KS-Admin </h3>
     </div>
@@ -53,18 +46,37 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                <select name="category" class="form-control form-control-lg @error('category') is-invalid @enderror">
+    <label for="category_id" class="form-label h5">Category</label>
+    <select name="category_id" class="form-control form-control-lg">
     <option value="">Select a Category</option>
-    <option value="Seeds & Saplings" {{ old('category', $product->category ?? '') == "Seeds & Saplings" ? 'selected' : '' }}>Seeds & Saplings</option>
-    <option value="Fertilizers & Pesticides" {{ old('category', $product->category ?? '') == "Fertilizers & Pesticides" ? 'selected' : '' }}>Fertilizers & Pesticides</option>
-    <option value="Farming Tools & Equipment" {{ old('category', $product->category ?? '') == "Farming Tools & Equipment" ? 'selected' : '' }}>Farming Tools & Equipment</option>
-    <option value="Animal Husbandry & Dairy" {{ old('category', $product->category ?? '') == "Animal Husbandry & Dairy" ? 'selected' : '' }}>Animal Husbandry & Dairy</option>
-    <option value="Agro-Technology & Smart Farming" {{ old('category', $product->category ?? '') == "Agro-Technology & Smart Farming" ? 'selected' : '' }}>Agro-Technology & Smart Farming</option>
+    @foreach($categories as $category)
+        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+            {{ $category->name }}
+        </option>
+    @endforeach
 </select>
 
-@error('category')
-    <p class="text-danger">{{ $message }}</p>
-@enderror
+    @error('category_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+
+
+<div class="mb-3">
+    <label for="sub_category_id" class="form-label h5">Sub-category</label>
+    <select name="sub_category_id" class="form-control form-control-lg @error('sub_category_id') is-invalid @enderror">
+        <option value="">Select Sub-category</option>
+        @foreach ($subcategories as $subCategory)
+            <option value="{{ $subCategory->id }}" {{ old('sub_category_id', $product->sub_category_id ?? '') == $subCategory->id ? 'selected' : '' }}>
+                {{ $subCategory->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('sub_category_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+
 
 
 </div>
@@ -86,6 +98,7 @@
         </div>
 
     </div>
+ 
+
     @endsection
-  <!-- </body>
-</html> -->
+

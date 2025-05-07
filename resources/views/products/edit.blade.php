@@ -1,6 +1,7 @@
 
   @extends('layouts.admin')
   @section('content')
+
     <div class="bg-dark py-3">
         <h3 class="text-white text-center">KS-Admin </h3>
     </div>
@@ -43,36 +44,55 @@
                      form-control form-control-lg" placeholder = "Price" name = "price">
                     @error('price')
                         <p class="invalid-feeback">{{ $message }}</p>
-                    @enderrork
+                    @enderror
                 </div>
                 <div class="mb-3">
-                <label for="" class = "form-label h5">Category</label>
-                <select name="category" class="form-control form-control-lg @error('category') is-invalid @enderror">
+    <label for="category_id" class="form-label h5">Category</label>
+    <select name="category_id" class="form-control form-control-lg @error('category_id') is-invalid @enderror">
     <option value="">Select a Category</option>
-    <option value="Seeds & Saplings" {{ old('category', $product->category ?? '') == "Seeds & Saplings" ? 'selected' : '' }}>Seeds & Saplings</option>
-    <option value="Fertilizers & Pesticides" {{ old('category', $product->category ?? '') == "Fertilizers & Pesticides" ? 'selected' : '' }}>Fertilizers & Pesticides</option>
-    <option value="Farming Tools & Equipment" {{ old('category', $product->category ?? '') == "Farming Tools & Equipment" ? 'selected' : '' }}>Farming Tools & Equipment</option>
-    <option value="Animal Husbandry & Dairy" {{ old('category', $product->category ?? '') == "Animal Husbandry & Dairy" ? 'selected' : '' }}>Animal Husbandry & Dairy</option>
-    <option value="Agro-Technology & Smart Farming" {{ old('category', $product->category ?? '') == "Agro-Technology & Smart Farming" ? 'selected' : '' }}>Agro-Technology & Smart Farming</option>
+    @foreach($categories as $category)
+    <option value="{{ $category->id }}" 
+    {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+    {{ $category->name }}
+</option>
+
+    @endforeach
 </select>
 
-@error('category')
-    <p class="text-danger">{{ $message }}</p>
-@enderror
+    @error('category_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+
+<div class="mb-3">
+    <label for="sub_category_id" class="form-label h5">Sub-category</label>
+    <select name="sub_category_id" class="form-control form-control-lg @error('sub_category_id') is-invalid @enderror">
+        <option value="">Select Sub-category</option>
+        @foreach ($subcategories as $subCategory)
+            <option value="{{ $subCategory->id }}" {{ old('sub_category_id', $product->sub_category_id ?? '') == $subCategory->id ? 'selected' : '' }}>
+                {{ $subCategory->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('sub_category_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+
 
 
 </div>
                 <div class = "mb-3">
                     <label for="" class = "form-label h5">Description</label>
-                    <textarea placeholder ="Description" class = "form-control" name="description" 
-                    cols ="30" rows="5"> {{ old('Description',$product->Description) }}</textarea>
+                    <textarea placeholder="Description" class="form-control" name="description" cols="30" rows="5">{{ old('description', $product->description) }}</textarea>
+
                 </div>
                 <div class = "mb-3">
                     <label for="" class = "form-label h5">Image</label>
                     <input type ="file" class="form-control form-control-lg" placeholder = "Add your Image" name = "image">
 
                     @if($product->image != "")
-                        <img class = "w-50 my-3" src="{{ asset('uploads/product/',$product->image)}}" alt="">
+                        <img class = "w-50 my-3" src="{{ asset('uploads/product/'.$product->image)}}" alt="">
                     @endif
                 </div>
                 <div class = "d-grid">
@@ -83,5 +103,7 @@
         </div>
 
     </div>
+ 
+
     @endsection
 
