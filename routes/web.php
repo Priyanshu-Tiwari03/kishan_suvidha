@@ -24,6 +24,7 @@ use App\Exports\ProductsExport;
 use App\Exports\CategoriesExport;
 use App\Exports\subcategoryExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\RazorpayController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,6 +38,12 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('process-register',[LoginController::class,'processRegister'])->name('account.processRegister');
         Route::post('authenticate',[LoginController::class,'authenticate'])->name('account.authenticate');
     });
+    //route for razorpay
+    
+
+    Route::get('/razorpay', [RazorpayController::class, 'index']);
+    Route::post('/razorpay/payment', [RazorpayController::class, 'payment'])->name('razorpay.payment');
+    Route::post('/razorpay/success', [RazorpayController::class, 'success'])->name('razorpay.success');
 
     // Auth Middleware for users
     Route::group(['middleware' => 'auth'], function () {
