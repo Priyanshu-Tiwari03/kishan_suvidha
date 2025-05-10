@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\SubCategory;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -36,5 +38,23 @@ class ProductController extends Controller
     
         return view('productpage', compact('product', 'avgRating', 'ratingsCount', 'ratingsBreakdown','hasPurchased'));
     }
+    public function viewByCategory($category)
+{
+    $products = Product::with(['category', 'subcategory'])
+        ->whereHas('category', function($q) use ($category) {
+            $q->where('name', $category);
+        })
+        ->get();
+
+    return view('category_products', compact('products', 'category'));
+}
+public function showBySubcategory($id)
+{
+    $subcategory = SubCategory::with('products')->findOrFail($id);
+    $products = $subcategory->products;
+
+    return view('by_subcategory', compact('subcategory', 'products'));
+}
+
     
 }

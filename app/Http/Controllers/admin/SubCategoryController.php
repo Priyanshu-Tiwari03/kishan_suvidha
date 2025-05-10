@@ -52,7 +52,7 @@ class SubCategoryController extends Controller
 
     SubCategory::create($data);
 
-    return redirect()->route('admin.Sub-categories.index')->with('success', 'Sub Category created successfully.');
+    return redirect()->route('admin.sub-categories.index')->with('success', 'Sub Category created successfully.');
 
     }
 
@@ -72,7 +72,7 @@ class SubCategoryController extends Controller
          $subCategory = SubCategory::findOrFail($id);
     $categories = Category::all(); // Dropdown ke liye
 
-    return view('admin.Sub-categories.edit', compact('SubCategory', 'Categories'));
+    return view('admin.sub-categories.edit', compact('subCategory', 'categories'));
 
     }
 
@@ -100,7 +100,7 @@ class SubCategoryController extends Controller
 
     $subCategory->update($data);
 
-    return redirect()->route('admin.Sub-categories.index')->with('success', 'Sub Category updated successfully.');
+    return redirect()->route('admin.sub-categories.index')->with('success', 'Sub Category updated successfully.');
 
     }
 
@@ -118,7 +118,7 @@ class SubCategoryController extends Controller
 
     $subCategory->delete();
 
-    return redirect()->route('admin.Sub-categories.index')->with('success', 'Sub Category deleted successfully.');
+    return redirect()->route('admin.sub-categories.index')->with('success', 'Sub Category deleted successfully.');
 
     }
     public function export()

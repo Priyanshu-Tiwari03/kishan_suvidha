@@ -1,4 +1,7 @@
-<form action="{{ route('admin.sub-categories.update', $subCategory->id) }}" method="POST" enctype="multipart/form-data">
+@extends('layouts.admin')
+
+@section('content')
+<form action="{{ route('admin.Sub-categories.update', $subCategory->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -39,3 +42,4 @@
 
     <button type="submit" class="btn btn-dark">Update Sub Category</button>
 </form>
+@endsection

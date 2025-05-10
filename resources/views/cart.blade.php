@@ -27,7 +27,7 @@
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $item['name'] }}</h5>
-                                    <p class="card-text text-muted">Quantity: {{ $item['quantity'] }}</p>
+                                   
                                     <p class="card-text text-success fw-bold">₹{{ $item['price'] }}</p>
                                     {{-- Optional Remove Button --}}
                                     <form action="{{ route('cart.remove', $id) }}" method="POST">

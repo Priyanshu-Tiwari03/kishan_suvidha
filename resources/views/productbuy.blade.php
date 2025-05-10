@@ -2,6 +2,13 @@
 @extends('layouts.user')
 
 @section('content')
+
+{{-- Success Message --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 <div class="container py-5">
     <div class="row">
         <div class="col-md-5">
@@ -12,9 +19,12 @@
         <div class="col-md-7">
             <h2>{{ $product['name'] }}</h2>
             <p class="mt-3">Detailed description or product info can go here.</p>
-            <p class="text-muted">Quantity in Cart: {{ $product['quantity'] }}</p>
+            <div class="mb-3">
+                    <label for="quantity" class="form-label">Select Quantity</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control w-25" value="1" min="1" max="{{ $product->quantity }}">
+                </div>
             <p class="text-success fw-bold fs-4">Price: ₹{{ $product['price'] }}</p>
-            <p class="text-info fs-5">Total: ₹{{ $product['price'] * $product['quantity'] }}</p>
+           
 
             <form action="#" method="POST">
                 @csrf

@@ -170,3 +170,6 @@ Route::get('/products/export/pdf', function () {
     // show all products in a given category
 Route::get('/category/{category}', [App\Http\Controllers\ProductController::class, 'category'])
 ->name('products.category');
+
+Route::get('/category/{category}', [ProductController::class, 'viewByCategory'])->name('category.products');
+Route::get('/subcategory/{id}', [ProductController::class, 'showBySubcategory'])->name('subcategory.products');
