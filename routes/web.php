@@ -180,3 +180,5 @@ Route::get('/category/{category}', [App\Http\Controllers\ProductController::clas
 
 Route::get('/category/{category}', [ProductController::class, 'viewByCategory'])->name('category.products');
 Route::get('/subcategory/{id}', [ProductController::class, 'showBySubcategory'])->name('subcategory.products');
+Route::get('/myorder', [OrderController::class, 'index'])->name('myorder');
+

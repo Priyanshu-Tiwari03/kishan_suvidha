@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <!-- Font Awesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -128,7 +129,7 @@
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
       <li><a class="dropdown-item" href="#">My Profile</a></li>
-      <li><a class="dropdown-item" href="#">My Orders</a></li>
+      <li><a class="dropdown-item" href="{{ route('myorder') }}">My Orders</a></li>
       <li><a class="dropdown-item" href="{{ route('account.logout') }}">Logout</a></li>
     </ul>
   </div>
