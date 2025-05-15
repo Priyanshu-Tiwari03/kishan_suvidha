@@ -51,7 +51,7 @@ class UserController extends Controller
         $user->address = $request->address;
         $user->role = $request->role;
         $user->password = bcrypt($request->password);
-        $user->save();
+       
 
         if ($request->hasFile('profile_photo')) {
             $image = $request->file('profile_photo');
@@ -60,6 +60,7 @@ class UserController extends Controller
             $user->profile_photo = $imageName;
             $user->save();
         }
+         $user->save();
         
         return redirect()->route('users.index')->with('success', 'User added successfully.');
     }

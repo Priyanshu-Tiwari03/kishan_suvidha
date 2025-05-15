@@ -10,11 +10,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\SchemeController;
-<<<<<<< HEAD
 use App\Http\Controllers\ReviewController;
-=======
 use App\Http\Controllers\WishlistController;
->>>>>>> 96dc1eba07bfc6d94cb4b9c3b9e0fcdcd6c6ee00
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Product;
@@ -199,7 +196,6 @@ Route::resource('orders', OrderController::class);
 Route::get('/category/{category}', [App\Http\Controllers\ProductController::class, 'category'])
 ->name('products.category');
 
-<<<<<<< HEAD
 Route::get('/category/{category}', [ProductController::class, 'viewByCategory'])->name('category.products');
 Route::get('/subcategory/{id}', [ProductController::class, 'showBySubcategory'])->name('subcategory.products');
 Route::get('/myorder', [OrderController::class, 'index'])->name('myorder');
@@ -213,5 +209,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/myprofile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/myprofile', [ProfileController::class, 'update'])->name('profile.update');
 });
-=======
->>>>>>> 96dc1eba07bfc6d94cb4b9c3b9e0fcdcd6c6ee00
