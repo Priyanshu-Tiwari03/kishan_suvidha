@@ -128,7 +128,7 @@
       <i class="bi bi-person fs-3"></i>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-      <li><a class="dropdown-item" href="#">My Profile</a></li>
+      <li><a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a></li>
       <li><a class="dropdown-item" href="{{ route('myorder') }}">My Orders</a></li>
       <li><a class="dropdown-item" href="{{ route('account.logout') }}">Logout</a></li>
     </ul>

@@ -119,8 +119,7 @@
 
        
  
-
-    {{-- Ratings & Reviews --}}
+ {{-- Ratings & Reviews --}}
     <div class="w-100 py-4" style="background-color: #f8f9fa;">
         <div class="d-flex flex-wrap justify-content-between align-items-start px-3 px-md-5">
             {{-- Rating Summary --}}
@@ -200,7 +199,6 @@
             </div>
         </div>
     </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const quantityInput = document.getElementById("quantity");

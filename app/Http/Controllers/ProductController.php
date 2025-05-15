@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
-use App\Models\Order;
+use App\Models\Payment;
 use App\Models\SubCategory;
 
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +20,14 @@ class ProductController extends Controller
         $hasPurchased = false;
 
         if (Auth::check()) {
-            $hasPurchased = Order::where('uid', Auth::id())
-                ->where('pid', $id)
-                ->exists();
+            // $hasPurchased = Order::where('uid', Auth::id())
+            //     ->where('pid', $id)
+            //     ->exists();
+                               
+            $hasPurchased = Payment::where('user_id',    Auth::id())   // ← use your real column names
+                                   ->where('product_id', $id)
+                                //  ->where('status',    1)       // (optional) only count successful payments
+                                   ->exists();
         }
 
  
@@ -54,6 +59,20 @@ public function showBySubcategory($id)
     $products = $subcategory->products;
 
     return view('by_subcategory', compact('subcategory', 'products'));
+}
+public function submitReview(Request $request, $id)
+{
+    // Validate input
+    $request->validate([
+        'rating' => 'required|integer|min:1|max:5',
+        'comment' => 'required|string|max:1000',
+    ]);
+
+    // Save review logic here...
+    // For example:
+    // Review::create([...]);
+
+    return back()->with('success', 'Review submitted successfully!');
 }
 
     

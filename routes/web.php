@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\SchemeController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Product;
@@ -25,6 +26,7 @@ use App\Exports\CategoriesExport;
 use App\Exports\subcategoryExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\RazorpayController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -182,3 +184,12 @@ Route::get('/category/{category}', [ProductController::class, 'viewByCategory'])
 Route::get('/subcategory/{id}', [ProductController::class, 'showBySubcategory'])->name('subcategory.products');
 Route::get('/myorder', [OrderController::class, 'index'])->name('myorder');
 
+
+
+Route::post('/product/{id}/review', [ProductController::class, 'submitReview'])->name('product.review');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/myprofile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/myprofile', [ProfileController::class, 'update'])->name('profile.update');
+});
