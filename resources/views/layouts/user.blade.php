@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kishan Suvidha</title>
   <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
   <style>
             #eventCarousel img {
@@ -90,7 +94,11 @@
 .user-dropdown:hover .dropdown-menu {
   display: block;
 }
-
+.product-img {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+    }
 
 
   </style>
@@ -121,7 +129,7 @@
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
       <li><a class="dropdown-item" href="#">My Profile</a></li>
-      <li><a class="dropdown-item" href="#">My Orders</a></li>
+      <li><a class="dropdown-item" href="{{ route('myorder') }}">My Orders</a></li>
       <li><a class="dropdown-item" href="{{ route('account.logout') }}">Logout</a></li>
     </ul>
   </div>
@@ -145,7 +153,7 @@
       <div class="container-fluid px-4 d-flex flex-wrap">
 
         <a href="{{ route('account.dasboard') }}">HOME</a>
-        <a href="#">OFFERS</a>
+        <!-- <a href="#">OFFERS</a> -->
 
         @foreach($categories as $category)
           @if($category->subcategories->count() > 0)
@@ -155,7 +163,12 @@
               </a>
               <ul class="dropdown-menu">
                 @foreach($category->subcategories as $subcategory)
-                  <li><a class="dropdown-item" href="#">{{ $subcategory->name }}</a></li>
+                
+                <li>
+                    <a href="{{ route('subcategory.products', $subcategory->id) }}">
+                        {{ $subcategory->name }}
+                    </a>
+                </li>
                 @endforeach
               </ul>
             </div>
@@ -184,14 +197,10 @@
 
 </body>
 <!-- Remove the container if you want to extend the Footer to full width. -->
-<div class="container my-3">
+<div class="container my-3" style="background-color:rgb(27, 150, 5)">
   <!-- Footer -->
-  <footer
-          class="text-center text-lg-start text-white"
-          style="background-color: #45526e"
-          >
-    <!-- Grid container -->
-    <div class="container p-4 pb-0">
+  <footer class="text-center text-lg-start text-white w-100" style="background-color:rgb(46, 151, 25)">
+  <div class="container p-4 pb-0">
       <!-- Section: Links -->
       <section class="">
         <!--Grid row-->
@@ -199,12 +208,10 @@
           <!-- Grid column -->
           <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
             <h6 class="text-uppercase mb-4 font-weight-bold">
-              Company name
+              Kishan Suvidha
             </h6>
             <p>
-              Here you can use rows and columns to organize your footer
-              content. Lorem ipsum dolor sit amet, consectetur adipisicing
-              elit.
+              Kishan suvidha is an E-commerce and service related web site.
             </p>
           </div>
           <!-- Grid column -->
@@ -214,18 +221,38 @@
           <!-- Grid column -->
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
             <h6 class="text-uppercase mb-4 font-weight-bold">Products</h6>
-            <p>
-              <a class="text-white">MDBootstrap</a>
+            @foreach($categories as $category)
+          @if($category->subcategories->count() > 0)
+            <div class="dropdown">
+             
+              
+                @foreach($category->subcategories as $subcategory)
+                
+              
+                    <a href="{{ route('subcategory.products', $subcategory->id) }}">
+                        {{ $subcategory->name }}
+                    </a>
+                    <br>
+              
+                @endforeach
+           
+            </div>
+          @else
+            <a href="#">{{ strtoupper($category->name) }}</a>
+          @endif
+        @endforeach
+            <!-- <p>
+              <a class="text-white">SEEDS</a>
             </p>
             <p>
-              <a class="text-white">MDWordPress</a>
+              <a class="text-white">FARTILIZER</a>
             </p>
             <p>
-              <a class="text-white">BrandFlow</a>
+              <a class="text-white">ANIMAL HUSBANDARY</a>
             </p>
             <p>
-              <a class="text-white">Bootstrap Angular</a>
-            </p>
+              <a class="text-white">TOOLS & EQUIPMENTS</a>
+            </p> -->
           </div>
           <!-- Grid column -->
 
@@ -256,8 +283,8 @@
           <!-- Grid column -->
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
             <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-            <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
-            <p><i class="fas fa-envelope mr-3"></i> info@gmail.com</p>
+            <p><i class="fas fa-home mr-3"></i> surat, ST 394230 , INDIA</p>
+            <p><i class="fas fa-envelope mr-3"></i> ksuvidha@gmail.com</p>
             <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
             <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
           </div>
@@ -276,9 +303,9 @@
           <div class="col-md-7 col-lg-8 text-center text-md-start">
             <!-- Copyright -->
             <div class="p-3">
-              © 2020 Copyright:
+              © 2025 Copyright:
               <a class="text-white" href="https://mdbootstrap.com/"
-                 >MDBootstrap.com</a
+                 >KISHAN SUVIDHA.com</a
                 >
             </div>
             <!-- Copyright -->

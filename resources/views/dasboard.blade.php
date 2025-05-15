@@ -45,12 +45,12 @@
                 <div class="carousel-item">
                     <img src="{{ asset('img/slider2.jpg') }}" class="d-block w-100" alt="Event 2">
                 </div>
-                <div class="carousel-item">
+                <!-- <div class="carousel-item">
                     <img src="event3.jpg" class="d-block w-100" alt="Event 3">
                 </div>
                 <div class="carousel-item">
                     <img src="event4.jpg" class="d-block w-100" alt="Event 4">
-                </div>
+                </div> -->
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -63,25 +63,55 @@
         </div>
         <div class="container py-4">
         
-    <div class="row row-cols-1 row-cols-md-5 g-4">
+
    
 
-        @foreach($products as $product)
-       
+    @foreach($groupedProducts as $categoryName => $products)
+    <div class="container mt-5">
+        <h3 class="mb-4">{{ $categoryName }}</h3>
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+            
+            @foreach($products->take(4) as $product)
+                <div class="col">
+                    <a href="{{ route('product.detail', $product->id) }}" class="text-decoration-none text-dark">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ asset('uploads/product/'.$product->image) }}" class="card-img-top product-img" alt="{{ $product->name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $product->name }}</h5>
+                                @php
+                                    $words = explode(' ', $product->description);
+                                    $shortDescription = implode(' ', array_slice($words, 0, 7));
+                                @endphp
+                                <p class="text-muted">
+                                    {{ $shortDescription }}
+                                    @if(count($words) > 7)
+                                        ... <a href="{{ route('product.detail', $product->id) }}">Read more</a>
+                                    @endif
+                                </p>
+                                @if($product->subcategory)
+                                    <p class="text-muted">SubCategory:- {{ $product->subcategory->name }}</p>
+                                @endif
+                                <p class="text-success fw-bold">Price:- ₹{{ $product->price }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+
+            <!-- View All Card -->
             <div class="col">
-            <a href="{{ route('product.detail', $product->id) }}" class="text-decoration-none text-dark">
-                    <div class="card h-100 shadow-sm">
-                        <img src="{{ asset('uploads/product/'.$product->image)}}" class="card-img-top" alt="{{ $product->name }}">
+                <a href="{{ route('category.products', ['category' => $categoryName]) }}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm text-center d-flex justify-content-center align-items-center bg-light">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="text-success fw-bold">₹{{ $product->price }}</p>
+                            <h5 class="text-primary">View All</h5>
                         </div>
                     </div>
                 </a>
             </div>
-        @endforeach
+
+        </div>
     </div>
-</div>
+@endforeach
 
         <div class="container mt-4">
             <div class="row">

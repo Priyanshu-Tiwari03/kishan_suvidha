@@ -192,4 +192,5 @@ Route::post('/schemes', [SchemeController::class, 'store'])->name('schemes.store
 Route::resource('orders', OrderController::class);
 // show all products in a given category
 Route::get('/category/{category}', [App\Http\Controllers\ProductController::class, 'category'])
-    ->name('products.category');
+->name('products.category');
+

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\Payment;
 
 class OrderController extends Controller
 {
@@ -12,8 +13,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['user', 'product'])->get();
-        return view('orders.index', compact('orders'));
+         $orders = Payment::where('user_id', auth()->id())
+                     ->where('status', 1) // Only successful payments
+                     ->latest()
+                     ->get();
+
+    return view('myorders', compact('orders'));
+
     }
 
     /**

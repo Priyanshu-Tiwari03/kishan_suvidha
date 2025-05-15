@@ -1,46 +1,15 @@
  @extends('layouts.user')
 
 @section('content')
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-5">
-                <img src="{{ asset('uploads/product/' . $product['image']) }}" 
-                     class="img-fluid rounded shadow" 
-                     alt="{{ $product['name'] }}">
-            </div>
-            <div class="col-md-7">
-                <h2>{{ $product['name'] }}</h2>
-                <p class="mt-3">Detailed description or product info can go here.</p>
-                <p class="text-muted">Quantity in Cart: {{ $product['quantity'] }}</p>
-                <p class="text-success fw-bold fs-4">Price: ₹{{ $product['price'] }}</p>
-                <p class="text-info fs-5">Total: ₹{{ $product['price'] * $product['quantity'] }}</p>
 
-                <form action="#" method="POST">
-                    @csrf
-                    {{-- Optional: Add actual buy logic here --}}
-                    <button class="btn btn-success">Buy Now</button>
-                </form>
-            </div>
+
+{{-- Success Message --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </div>
-    {{-- razorpay --}}
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Razorpay Payment</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    </head>
-
-    <body class="container mt-5">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Success!</strong> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+    @endif
+    
 
         @if (session('payment'))
             <div class="card mt-3">
@@ -54,35 +23,102 @@
             </div>
         @endif
 
-        <h2>Razorpay Payment Integration</h2>
-        <form action="{{ route('razorpay.payment') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" name="name" class="form-control" required>
+
+     <div class="container py-5">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="{{ asset('uploads/product/' . $product['image']) }}" 
+                     class="img-fluid rounded shadow" 
+                     alt="{{ $product['name'] }}">
             </div>
+            <div class="col-md-7">
+                <h2>{{ $product['name'] }}</h2>
+                <p class="mt-3"> {{ $product['description'] }}</p>
+                <p class="text-muted">SKU: {{ $product['sku'] }}</p>
+                <p class="text-muted">Category:- {{ $product->category->name }}</p>
+                <p class="text-muted">SubCategory:- {{ $product->subcategory->name }}</p>
+                <p class="text-success fw-bold fs-4">Price: ₹{{ $product['price'] }}</p>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" name="email" class="form-control" required>
+                <button class="btn btn-success mb-3" id="buyNowBtn">Buy Now</button>
+</div>
+
+{{-- Razorpay Payment Form (Hidden Initially) --}}
+<br>
+<br>    
+<div id="orderForm" style="display: none;">
+    <h2 class="bg-success text-white">To Order : Please Enter the details.</h2>
+    <form action="{{ route('razorpay.payment') }}" method="POST">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+        <input type="hidden" id="unitPrice" value="{{ $product['price'] }}">
+
+        {{-- Full Name --}}
+        <div class="mb-3">
+    <label class="form-label">Your Name</label>
+    <input type="text" class="form-control" value="{{ auth()->user()->name }}" disabled>
+</div>
+        {{-- Email --}}
+       <div class="mb-3">
+    <label class="form-label">Your Email</label>
+    <input type="email" class="form-control" value="{{ auth()->user()->email }}" disabled>
+</div>
+
+        {{-- Phone --}}
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" name="phone" class="form-control" required>
+        </div>
+
+        {{-- Address Fields --}}
+        <div class="mb-3">
+            <label class="form-label">Apartment No. / Building</label>
+            <input type="text" name="apartment" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">City</label>
+            <input type="text" name="city" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">District</label>
+            <input type="text" name="district" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">State</label>
+            <input type="text" name="state" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Pincode</label>
+            <input type="text" name="pincode" class="form-control" required>
+        </div>
+
+        {{-- Quantity --}}
+        <div class="mb-3">
+            <label class="form-label">Quantity (Max: {{ $product['sku'] }})</label>
+            <input type="number" name="quantity" id="quantity" class="form-control" min="1" max="{{ $product['sku'] }}" required>
+        </div>
+
+        {{-- Amount --}}
+        <div class="mb-3">
+            <label class="form-label">Amount (INR)</label>
+            <input type="number" name="amount" id="amount" class="form-control" readonly>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Proceed to Pay</button>
+
+</div>
+
             </div>
+        </div>
+    </div> 
+  
+      
 
-            <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="text" name="phone" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="amount" class="form-label">Amount (INR)</label>
-                <input type="number" name="amount" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Proceed to Pay</button>
-        </form>
-
-    </body>
-
-    </html>
+       
+ 
 
     {{-- Ratings & Reviews --}}
     <div class="w-100 py-4" style="background-color: #f8f9fa;">
@@ -164,5 +200,34 @@
             </div>
         </div>
     </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const quantityInput = document.getElementById("quantity");
+        const amountInput = document.getElementById("amount");
+        const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+        const buyNowBtn = document.getElementById("buyNowBtn");
+        const orderForm = document.getElementById("orderForm");
+
+        // Show order form on Buy Now click
+        buyNowBtn.addEventListener("click", function () {
+            orderForm.style.display = "block";
+            buyNowBtn.style.display = "none";
+             orderForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Calculate amount based on quantity
+        quantityInput.addEventListener("input", function () {
+            const quantity = parseInt(quantityInput.value);
+            if (!isNaN(quantity) && quantity > 0) {
+                const total = unitPrice * quantity;
+                amountInput.value = total;
+            } else {
+                amountInput.value = '';
+            }
+        });
+    });
+</script>
+
 
 @endsection
